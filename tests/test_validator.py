@@ -3,11 +3,7 @@ from cron.validator import CronValidator
 
 class TestValidator:
 
-
     def test_is_valid_cron_with_valid_cron(self):
-        '''
-        Sanity check against known calculator result
-        '''
         # Given
         cron = '*/15 0 1,15 4 1-5 /usr/bin/find yourmom'
 
@@ -18,9 +14,6 @@ class TestValidator:
         assert result == True
 
     def test_is_valid_cron_with_invalid_cron(self):
-        '''
-        Sanity check against known calculator result
-        '''
         # Given
         cron = 'hello world'
 
@@ -29,4 +22,16 @@ class TestValidator:
 
         # Then
         assert result == False
+
+    def test_validate_with_valid_cron(self):
+        # Given
+        cron = "*/15 0 1,15 4 1-5 /usr/bin/find"
+
+        # When
+        result = CronValidator.validate(cron)
+
+        # Then
+        expected = ['*/15', '0', '1,15', '4', '1-5', '/usr/bin/find']
+        for val, expected_val in zip(result, expected):
+            assert val == expected_val
 

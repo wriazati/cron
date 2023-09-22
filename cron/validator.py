@@ -2,7 +2,7 @@ import re
 from collections import OrderedDict
 from typing import List
 
-from exceptions import InvalidNumberOfArgumentsException, IllegalCharacterException, ValueOutOfBoundsException, \
+from cron.exceptions import InvalidNumberOfArgumentsException, IllegalCharacterException, ValueOutOfBoundsException, \
     ValidationException
 
 LEGAL_CHAR_PATTERN = r'^[0-9/*,\-]+$'

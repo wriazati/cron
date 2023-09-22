@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from typing import List
 
-from validator import CronValidator
+from cron.validator import CronValidator
 
 TIME_RULES = OrderedDict([
     ('minutes', (0, 59)),
@@ -14,7 +14,7 @@ TIME_RULES = OrderedDict([
 class Cron():
     def __init__(self, cron_expression):
         self.cron = CronValidator.validate(cron_expression)
-        self.results = {}
+        self.results = OrderedDict()
 
         for field, user_value in zip(TIME_RULES, self.cron):
             field_bounds = TIME_RULES[field]
@@ -22,11 +22,10 @@ class Cron():
 
     def all_values(self, field, field_bounds, user_values) -> List[str]:
         """
-
-        :param field:
-        :param field_bounds:
-        :param user_value:
-        :return:
+        :param field: Name of cron field
+        :param field_bounds: Valid start and end bounds for the field
+        :param user_values: User input for that field
+        :return: valid values with that match bounds
         """
         results = set()
 
@@ -65,7 +64,7 @@ class Cron():
 
         raise Exception("_get_range: ", string, bounds)
 
-    def _format_results_numbers(self, l: List[int]):
+    def _format_results_numbers(self, l: List[str]):
         b = []
         for num in l:
             b.append(str(num))
@@ -82,7 +81,6 @@ class Cron():
             results_string = self._format_results_numbers(self.results[field])
             s = f"{field:{max_field_length}}\t{results_string}"
             builder.append(s)
-
         builder.append(f"command         {self.cron[-1]}")
 
         return '\n'.join(builder)
